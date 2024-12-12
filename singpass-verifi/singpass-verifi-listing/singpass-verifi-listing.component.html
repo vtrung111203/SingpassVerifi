@@ -1,0 +1,25 @@
+<ng-container *ngIf="appVm$ | async as appVm">
+  <ng-container *ngIf="vm$ | async as vm">
+    <div class="h-100 d-flex flex-column">
+      <div class="filter-bar d-flex">
+        <fts-period
+          [(period)]="vm.period"
+          [periodDatas]="vm.periodDatas"
+          (periodChange)="onPeriodChange($event)"
+          [showDatePicker]="true"
+        ></fts-period>
+        <div class="search-control form-control">
+          <button class="btn btn-primary" (click)="onSearch()">
+            <i class="fa fa-search"></i>
+            <span>{{ commonResource.MSG_SEARCH }}</span>
+          </button>
+        </div>
+      </div>
+      <fts-dict-base-listing-base
+        class="flex-1 hide-overflow"
+        (pageChange)="onPageChange($event)"
+        (buttonClick)="onButtonClick($event)"
+      ></fts-dict-base-listing-base>
+    </div>
+  </ng-container>
+</ng-container>

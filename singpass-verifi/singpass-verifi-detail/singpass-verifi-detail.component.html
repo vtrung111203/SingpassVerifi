@@ -1,0 +1,97 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <fts-dict-base-detail>
+    <ng-container formControls>
+      <ng-container *ngIf="vm.formGroup">
+        <ng-container *ngFor="let conf of vm.controlConfigs">
+          <ng-container *ngIf="conf.CONTROL_VISIBLE">
+            <div *ngIf="conf.CONTROL_BREAK_ROW" class="col-12"></div>
+            <ng-container [ngSwitch]="conf.CONFIG_NAME">
+              <ng-container *ngSwitchCase="'STATUS_ID'">
+                <div
+                  class="form-control h-100 {{ conf.CONTROL_WIDTH }}"
+                  [formGroup]="vm.formGroup"
+                >
+                  <fts-label
+                    *ngIf="conf.CONTROL_VISIBLE_LABEL"
+                    [for]="control"
+                    [(width)]="lbWidth"
+                    [required]="conf.REQUIRE"
+                    [text]="conf.RES_VALUE || conf.CONFIG_NAME"
+                  ></fts-label>
+                  <fts-dropdown
+                    #control
+                    [id]="conf.CONFIG_NAME"
+                    [name]="conf.CONFIG_NAME"
+                    [formControlName]="conf.CONFIG_NAME"
+                    [readonly]="conf.READONLY"
+                    [dataSource]="vm.otherDm.TranStatusList"
+                    valueField="STATUS_ID"
+                    textField="STATUS_NAME"
+                  ></fts-dropdown>
+                </div>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'INVESTOR_PROFILE_ID'">
+                <div
+                  class="form-control h-100 {{
+                    conf.CONTROL_VISIBLE_LABEL ? '' : 'text-lookup-name'
+                  }} {{ conf.CONTROL_WIDTH }}"
+                  [formGroup]="vm.formGroup"
+                >
+                  <fts-label
+                    *ngIf="conf.CONTROL_VISIBLE_LABEL"
+                    [for]="control"
+                    [(width)]="lbWidth"
+                    [required]="conf.REQUIRE"
+                    [text]="conf.RES_VALUE || conf.CONFIG_NAME"
+                  ></fts-label>
+                  <fts-text-lookup
+                    #control
+                    [id]="conf.CONFIG_NAME"
+                    [name]="conf.CONFIG_NAME"
+                    [readonly]="conf.READONLY"
+                    [formControlName]="conf.CONFIG_NAME"
+                    [service]="textLookupService.dmInvestorSelectorService"
+                    tableName="SINGPASS_VERIFI"
+                    valueField="INVESTOR_PROFILE_ID"
+                    textField="INVESTOR_PROFILE"
+                    controlTextName="INVESTOR_PROFILE"
+                    [quickAddType]="typesTextLookup.dmInvestorProfileDetail"
+                    [record]="state.currentRow"
+                    [filters]="[
+                      {
+                        Filters: [
+                          {
+                            Field: 'ACTIVE',
+                            Operator: 'eq',
+                            Value: 1
+                          }
+                        ],
+                        Logic: 'and'
+                      }
+                    ]"
+                  ></fts-text-lookup>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <fts-form-control
+                  [class]="conf.CONTROL_WIDTH"
+                  [fieldId]="conf.CONFIG_NAME"
+                  [dataType]="conf.DATA_TYPE"
+                  [require]="conf.REQUIRE"
+                  [showLable]="conf.CONTROL_VISIBLE_LABEL"
+                  [(labelWidth)]="lbWidth"
+                  [label]="conf.RES_VALUE || conf.CONFIG_NAME"
+                  [format]="conf.FORMAT"
+                  [readonly]="conf.READONLY"
+                  [formGroup]="vm.formGroup"
+                  [isIdField]="conf.CONFIG_NAME == vm.fieldId"
+                ></fts-form-control>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </fts-dict-base-detail>
+</ng-container>
